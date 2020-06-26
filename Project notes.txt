@@ -1,0 +1,18 @@
+USERS 
+- Allowed to register and authenticate
+- Can only see books they Enter
+- Cannot see each others' books
+- UNAUTH USERS cant see anything
+
+    - Can UPDATE Books (including BOOK STATUS)
+    - Can DELETE Books
+    - Can add NOTES to Books
+    
+
+BOOKS
+- Title
+- Authors
+- Status (TO READ, READING, READ)
+- Can be retrieved as BIG LIST or BY STATUS
+    - CAN ADD MORE
+
