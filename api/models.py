@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.db.models import Q
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -29,14 +30,14 @@ class Book(models.Model):
             (reading, 'Reading'),
             (read, 'Read'),
         ]
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="book_users")
-
-    status = models.CharField(max_length=100, choices=BookStatusChoice.choices, default=BookStatusChoice.to_read)
-
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="books"),
+    status = models.CharField(max_length=100, choices=BookStatusChoice.choices, default=BookStatusChoice.to_read),
+    author = models.CharField(max_length=35),
     title = models.TextField(max_length=100),
 
 
-class Notes(models.Model):  
+class Note(models.Model):
+    book = models.ForeignKey(to=Book, on_delete=models.CASCADE, related_name="notes")  
     created_at = models.DateTimeField(auto_now_add=True),
-    body = models.CharField(max_length=200),
+    body = models.CharField(max_length=500),
     page_num = models.CharField(max_length=10),
