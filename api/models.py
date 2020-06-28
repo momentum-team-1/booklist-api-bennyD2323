@@ -11,13 +11,9 @@ from django.db.models import Q
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
-
-
         
 class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
-
-
 
 class Book(models.Model):
 
@@ -31,9 +27,13 @@ class Book(models.Model):
             (read, 'Read'),
         ]
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="books"),
+
     status = models.CharField(max_length=100, choices=BookStatusChoice.choices, default=BookStatusChoice.to_read),
     author = models.CharField(max_length=35),
     title = models.TextField(max_length=100),
+
+    def __str__(self):
+        return self.title
 
 
 class Note(models.Model):

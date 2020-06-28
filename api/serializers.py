@@ -2,27 +2,33 @@ from rest_framework import serializers
 from api.models import User, Book, Note
 
 
-class UserSerializer(serializers.HyperlinkModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
         fields = [
+            'id',
+            'username',
+            'email',
             'date_joined',
         ]
 
 
-class BookSerializer(serializers.HyperlinkModelSerializer):
-
+class BookSerializer(serializers.ModelSerializer):
+    notes = serializers.StringRelatedField()
     class Meta:
         model = Book
         fields = [
+            'id',
+            'url',
             'user',
             'status',
             'author',
             'title',
+            'notes',
         ]
 
-class NoteSerializer(serializers.HyperlinkModelSerializer):
+class NoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Note
@@ -30,6 +36,8 @@ class NoteSerializer(serializers.HyperlinkModelSerializer):
             'created_at',
             'body',
             'page_num',
+            'note',
+            'book',
         ]
 
 
