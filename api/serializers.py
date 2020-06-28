@@ -13,21 +13,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'date_joined',
         ]
 
-
-class BookSerializer(serializers.ModelSerializer):
-    notes = serializers.StringRelatedField()
-    class Meta:
-        model = Book
-        fields = [
-            'id',
-            'url',
-            'user',
-            'status',
-            'author',
-            'title',
-            'notes',
-        ]
-
 class NoteSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -38,6 +23,19 @@ class NoteSerializer(serializers.ModelSerializer):
             'page_num',
             'note',
             'book',
+        ]
+
+class BookSerializer(serializers.HyperlinkedModelSerializer):
+    notes = NoteSerializer(many=True, read_only=True)
+    class Meta:
+        model = Book
+        fields = [
+            'url',
+            # 'user',
+            'status',
+            'author',
+            'title',
+            'notes',
         ]
 
 

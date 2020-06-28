@@ -26,18 +26,23 @@ class Book(models.Model):
             (reading, 'Reading'),
             (read, 'Read'),
         ]
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="books"),
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="books", null=True, blank=True),
 
     status = models.CharField(max_length=100, choices=BookStatusChoice.choices, default=BookStatusChoice.to_read),
-    author = models.CharField(max_length=35),
-    title = models.TextField(max_length=100),
-
-    def __str__(self):
-        return self.title
+    author = models.CharField(max_length=35, null=True, blank=True),
+    title = models.TextField(max_length=100, null=True, blank=True),
 
 
 class Note(models.Model):
-    book = models.ForeignKey(to=Book, on_delete=models.CASCADE, related_name="notes")  
-    created_at = models.DateTimeField(auto_now_add=True),
-    body = models.CharField(max_length=500),
-    page_num = models.CharField(max_length=10),
+    book = models.ForeignKey(to=Book, on_delete=models.CASCADE, related_name="notes", null=True, blank=True)  
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True),
+    body = models.CharField(max_length=500, null=True, blank=True),
+    page_num = models.CharField(max_length=10, null=True, blank=True),
+
+
+def get_available_books_for_user(queryset, user):
+    if user.is_authenticated:
+        books = queryset.filter(Q(user=user))
+    else:
+        books = None
+    return books
