@@ -23,6 +23,7 @@ router = routers.DefaultRouter()
 router.register('users', api_views.UserViewSet)
 router.register('books', api_views.BookViewSet)
 router.register('notes', api_views.NoteViewSet)
+router.register('authors', api_views.AuthorViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

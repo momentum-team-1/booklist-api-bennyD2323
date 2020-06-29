@@ -16,27 +16,28 @@ class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
 
 class Book(models.Model):
+    # user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="books", null=True, blank=True),
+    # author = models.CharField(max_length=35, null=True, blank=True),
+    title = models.TextField(max_length=250, null=True, blank=True),
+    to_read = 'to_read'
+    reading = 'reading'
+    read = 'read'
+    STATUS_CHOICES = [
+        (to_read, 'To Read'),
+        (reading, 'Reading'),
+        (read, 'Read'),
+    ]
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=to_read),
 
-    class BookStatusChoice(models.TextChoices):
-        to_read = 'to_read'
-        reading = 'reading'
-        read = 'read'
-        BOOK_STATUS_CHOICES = [
-            (to_read, 'To Read'),
-            (reading, 'Reading'),
-            (read, 'Read'),
-        ]
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="books", null=True, blank=True),
-
-    status = models.CharField(max_length=100, choices=BookStatusChoice.choices, default=BookStatusChoice.to_read),
-    author = models.CharField(max_length=35, null=True, blank=True),
-    title = models.TextField(max_length=100, null=True, blank=True),
-
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+    book = models.ForeignKey(to=Book, on_delete=models.CASCADE, null=True, blank=True, related_name="authors")
 
 class Note(models.Model):
-    book = models.ForeignKey(to=Book, on_delete=models.CASCADE, related_name="notes", null=True, blank=True)  
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, related_name="notes"),
+    book = models.ForeignKey(to=Book, on_delete=models.CASCADE, related_name="notes", null=True, blank=True),  
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True),
-    body = models.CharField(max_length=500, null=True, blank=True),
+    body = models.TextField(),
     page_num = models.CharField(max_length=10, null=True, blank=True),
 
 
